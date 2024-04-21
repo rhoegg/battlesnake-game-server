@@ -1,8 +1,12 @@
 package main
 
 import (
+	"fmt"
 	"github.com/BattlesnakeOfficial/rules/cli/commands"
+	"github.com/coreos/go-systemd/daemon"
 	"github.com/labstack/echo/v4"
+	"log"
+	"net"
 	"net/http"
 	"time"
 )
@@ -36,7 +40,14 @@ func main() {
 		}
 		return c.String(http.StatusOK, "Game finished")
 	})
-	e.Logger.Fatal(e.Start(":8999"))
+
+	l, err := net.Listen("tcp", fmt.Sprintf(":%s", "8999"))
+	if err != nil {
+		e.Logger.Fatal(err)
+	}
+	e.Listener = l
+	daemon.SdNotify(false, daemon.SdNotifyReady)
+	e.Logger.Fatal(e.Start(""))
 }
 
 func RunGame(gameParams GameParams) error {
@@ -59,5 +70,6 @@ func RunGame(gameParams GameParams) error {
 	if err := gameState.Initialize(); err != nil {
 		return err
 	}
+	log.Print("running battlesnake game at %v", gameState.URLs)
 	return gameState.Run()
 }
