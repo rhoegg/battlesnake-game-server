@@ -36,6 +36,7 @@ func main() {
 		}
 
 		if err := RunGame(gameParams); err != nil {
+			log.Printf("error running game $v", err)
 			return err
 		}
 		return c.String(http.StatusOK, "Game finished")
