@@ -16,10 +16,11 @@ type Snake struct {
 	URL  string
 }
 type GameParams struct {
-	Size    int     `json:"size"`
-	Type    string  `json:"type"`
-	Timeout int     `json:"timeout"`
-	Snakes  []Snake `json:"snakes"`
+	Size         int     `json:"size"`
+	Type         string  `json:"type"`
+	Timeout      int     `json:"timeout"`
+	TurnDuration int     `json:"turnDuration"`
+	Snakes       []Snake `json:"snakes"`
 }
 
 func main() {
@@ -56,6 +57,7 @@ func RunGame(gameParams GameParams) error {
 	gameState.Width = gameParams.Size
 	gameState.Height = gameParams.Size
 	gameState.Timeout = gameParams.Timeout
+	gameState.TurnDuration = gameParams.TurnDuration
 	gameState.GameType = gameParams.Type
 	gameState.MapName = "standard"
 	gameState.Seed = time.Now().UTC().UnixNano()
